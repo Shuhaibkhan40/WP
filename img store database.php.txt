@@ -1,0 +1,43 @@
+<html>
+<body>
+<form method="POST" enctype="multipart/form-data" >
+<label>Select image : </label>
+<input type="file" name="image" />
+<input type="submit" name="submit" value="Upload" />
+</form>
+</body>
+</html>
+<?php
+if(isset($_POST["submit"])){
+$conn = new mysqli("localhost", "root", "","sample");
+if(!$conn) {
+echo "Connection Failed!";
+}
+else {
+$image = $_FILES['image']['name'];
+$temp_name = $_FILES['image']['tmp_name'];
+$q1 = "INSERT INTO imagetable(img_name, time) VALUES('$image', NOW());";
+$insert = $conn->query($q1);
+if($insert) {
+echo "File uploaded successfully!";
+}
+else {
+echo "File upload failed!";
+}
+if(move_uploaded_file($temp_name, "uploads/$image")) {
+echo "<br/>Copied<br/>";
+}
+$q2 = "SELECT img_name FROM imagetable ORDER BY id desc;";
+$result = $conn->query($q2);
+if($result-> num_rows > 0) {
+while($row = $result->fetch_assoc()) {
+?>
+<div>
+<img src="uploads/<?= $row['img_name'] ?>" />
+</div>
+<?php
+}
+}
+}
+}
+?>
