@@ -1,0 +1,10 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sb
+df = pd.read_csv('lab101.csv')
+df.head(5)
+corr =df.corr()
+corr
+fig, ax = plt.subplots()
+sb.heatmap(corr, annot=True)
+plt.show()
