@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StudentInfo>
+<s1>
+<Name>ABC</Name>
+<Age>19</Age>
+<Course>BCA</Course>
+<Sem>5</Sem>
+</s1>
+<s2>
+<Name>MNO</Name>
+<Age>17</Age>
+<Course>ABC</Course>
+<Sem>3</Sem>
+</s2>
+<s3>
+<Name>XYZ</Name>
+<Age>18</Age>
+<Course>ABC</Course>
+<Sem>4</Sem>
+</s3>
+</StudentInfo>
+Index.php
+<?php
+$xml = simplexml_load_file('Data.xml');
+echo $xml->getName() . "<br/>";
+$conn = new mysqli('localhost', 'root', '', 'sample');
+foreach ($xml->children() as $child) {
+$sno = $child->getName();
+$n = $child->Name;
+$a = $child->Age;
+$c = $child->Course;
+$s = $child->Sem;
+$q1 = "Insert into student values('$sno','$n','$a','$c','$s');";
+if ($conn->query($q1))
+echo "Row Inserted!<br/>";
+}
+$q2 = "select * from student;";
+$result = $conn->query($q2);
+if ($result->num_rows > 0) {
+while ($row = $result->fetch_assoc()) {
+echo "Name : " . $row['Name'] .
+"<br/>Age : " . $row['Age'] .
+"<br/>Course : " . $row['Course'] .
+"<br/>Semester : " . $row['Sem'] . "<br/>";
+}
+}
+?>
